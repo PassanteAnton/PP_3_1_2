@@ -4,6 +4,7 @@ import com.example.CRUD.models.Role;
 import com.example.CRUD.models.User;
 import com.example.CRUD.userrepository.CustomUserRepository;
 import com.example.CRUD.userrepository.RolesRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,7 @@ import java.util.*;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService,UserDetailsService{
+public class UserServiceImpl implements UserService{
 
     @PersistenceContext
     private EntityManager em;
@@ -26,20 +27,23 @@ public class UserServiceImpl implements UserService,UserDetailsService{
     private CustomUserRepository userRepository;
 
 
-        public boolean saveUser(User user) {
-            User userFromDb = userRepository.findByUserName(user.getUserName());
+    public boolean saveUser(User user, int role) {
+        User userFromDb = userRepository.findByUserName(user.getUserName());
 
-            if(userFromDb != null){
+        if(userFromDb != null){
 
-                return false;
-            }
-           Set<Role>roles = new HashSet<>();
-            roles.add(new Role(1L, "ROLE_USER"));
-            user.setRoles(roles);
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            return true;
+            return false;
         }
+        Set<Role>roles = new HashSet<>();
+        if(role == 1) {
+            roles.add(new Role(1L, "ROLE_USER"));
+
+        }else roles.add(new Role(2L, "ROLE_ADMIN"));
+        user.setRoles(roles);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return true;
+    }
 
         public List<User> getAllUser() {
             return (List<User>) userRepository.findAll();
@@ -88,10 +92,14 @@ public class UserServiceImpl implements UserService,UserDetailsService{
                 .setParameter("paramId", idMin).getResultList();
     }
 
-    public UserServiceImpl(EntityManager em, RolesRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder, CustomUserRepository userRepository) {
+    public UserServiceImpl(EntityManager em, RolesRepository roleRepository, CustomUserRepository userRepository) {
         this.em = em;
         this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+
         this.userRepository = userRepository;
+    }
+    @Autowired
+    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 }
