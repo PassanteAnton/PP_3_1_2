@@ -1,6 +1,8 @@
 package com.example.CRUD.controllers;
 
+import com.example.CRUD.models.Role;
 import com.example.CRUD.models.User;
+import com.example.CRUD.service.RoleService;
 import com.example.CRUD.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminController {
     private UserService userService;
+    private RoleService roleService;
 
 
     @GetMapping()
@@ -23,6 +26,7 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String userDateEditOrDelete(@PathVariable("id")Long id, Model model){
         model.addAttribute("user", userService.findById(id));
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin/adminEdit";
     }
     @GetMapping("/new")
@@ -33,7 +37,7 @@ public class AdminController {
     }
     @PostMapping()
     public String createUser(@ModelAttribute("user") User user){
-        userService.saveUser(user, 1);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
@@ -57,7 +61,9 @@ public class AdminController {
     }
 
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
+
         this.userService = userService;
+        this.roleService = roleService;
     }
 }

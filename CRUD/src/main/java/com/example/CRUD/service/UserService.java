@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    boolean saveUser(User user, int role);
+    boolean saveUser(User user);
     List<User> getAllUser();
     User findById(Long id);
     boolean updateUser( User user);

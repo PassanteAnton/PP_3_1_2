@@ -33,7 +33,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Пароли не совпадают");
             return "users/registration";
         }
-        if(!userService.saveUser(userForm, 1)){
+        if(!userService.saveUser(userForm)){
             model.addAttribute("userNameError", "Такой пользователь уже существует");
             return "users/registration";
         }

@@ -30,7 +30,7 @@ public class RunAfterStartu {
         firstAdmin.setEmail("Email@Mail.ru");
         firstAdmin.setUserName("1");
         firstAdmin.setPassword("1");
-        userService.saveUser(firstAdmin, 2);
+        userService.saveUser(firstAdmin);
 
         System.out.println("Админ аккаунт User name:1 Password:1");
     }

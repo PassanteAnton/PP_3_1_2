@@ -25,6 +25,9 @@
         <input placeholder="Age" type="number" th:field ="*{age}" id="age"/>
         <div  style="color: crimson" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name errors</div>
         <br/>
+        <select multiple class="form-control" id="sel2" name="sellist2" th:field ="*{passwordConfirm}">
+            <option th:each="i : ${roles}" th:value="${i.getSimpleName()}" th:text="${i.getSimpleName()}">
+        </select>
         <input type="submit" value="Update !"/>
     </form>
     <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
