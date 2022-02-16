@@ -36,8 +36,12 @@ public class AdminController {
 
     }
     @PostMapping()
-    public String createUser(@ModelAttribute("user") User user){
-        userService.saveUser(user);
+    public String createUser(@ModelAttribute("user") User user, Model model){
+
+        if(!userService.saveUser(user)){
+            model.addAttribute("userNameError", "Такой пользователь уже существует");
+            return "admin/admiNew";
+        }
         return "redirect:/admin";
     }
 

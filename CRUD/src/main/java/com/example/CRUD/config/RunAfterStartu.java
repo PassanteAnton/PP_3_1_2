@@ -10,8 +10,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import javax.management.relation.RoleStatus;
-
 @Component
 public class RunAfterStartu {
 
@@ -23,6 +21,7 @@ public class RunAfterStartu {
     public void runAfterStartup() {
         roleService.saveRole(new Role(1L, "ROLE_USER"));
         roleService.saveRole(new Role(2L, "ROLE_ADMIN"));
+        System.out.println(roleService.getAllRoles());
         User firstAdmin = new User();
         firstAdmin.setName("Name");
         firstAdmin.setLastName("LastName");
@@ -30,6 +29,7 @@ public class RunAfterStartu {
         firstAdmin.setEmail("Email@Mail.ru");
         firstAdmin.setUserName("1");
         firstAdmin.setPassword("1");
+        firstAdmin.setPasswordConfirm("ADMIN");
         userService.saveUser(firstAdmin);
 
         System.out.println("Админ аккаунт User name:1 Password:1");
